@@ -1,25 +1,19 @@
 # News Text Classification
 
-This project now connects the web page text input to the trained ML model through a Flask API.
+This repository contains the base machine learning project for Arabic news text classification.
 
-## Model files required
+## Project contents
 
-Place one of the following in the project root:
+- `arabic_news_classification.ipynb` — main notebook for preprocessing, training, and evaluation
+- `sample.ipynb` — additional notebook experiments
+- `*.png` files — generated visualizations
 
-- `model.joblib` (a full sklearn pipeline), or
-- `classifier.joblib` and `vectorizer.joblib`
-
-## Run
+## Setup
 
 ```bash
 pip install -r requirements.txt
-python app.py
 ```
 
-Then open:
+## Usage
 
-- `http://127.0.0.1:5000`
-
-The **Classify** button sends the text to `/predict`, and the model result is displayed in the page.
-
-> Note: `python app.py` runs Flask's development server. For production, use a production WSGI server (for example, gunicorn or waitress).
+Open and run the notebooks to reproduce preprocessing, training, and evaluation steps.
