@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News Text Classification</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>News Text Classification</h1>
+    <p class="subtitle">Enter a news paragraph and click classify.</p>
+
+    <label for="newsText">News Text</label>
+    <textarea id="newsText" placeholder="Type or paste news text here..."></textarea>
+
+    <div class="actions">
+      <button id="classifyBtn" type="button">Classify</button>
+      <button id="clearBtn" type="button" class="secondary">Clear</button>
+    </div>
+
+    <section class="result" aria-live="polite">
+      <h2>Result</h2>
+      <p id="statusText">No classification yet.</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
