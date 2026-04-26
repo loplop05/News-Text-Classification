@@ -93,7 +93,7 @@ def preprocess_arabic(text: str) -> str:
     return " ".join(tokens)
 
 
-def _load_model() -> Any:
+def load_model() -> Any:
     pipeline_path = BASE_DIR / "model.joblib"
     if pipeline_path.exists():
         return joblib.load(pipeline_path)
@@ -110,7 +110,7 @@ def _load_model() -> Any:
     )
 
 
-MODEL = _load_model()
+MODEL = load_model()
 app = Flask(__name__, static_folder=".", static_url_path="")
 
 
@@ -145,7 +145,11 @@ def predict():
 
     response = {"category": str(prediction)}
     if probabilities is not None and classes is not None and len(probabilities) > 0:
-        confidence = max(float(prob) for prob in probabilities)
+        class_list = list(classes)
+        if prediction in class_list:
+            confidence = float(probabilities[class_list.index(prediction)])
+        else:
+            confidence = max(float(prob) for prob in probabilities)
         response["confidence"] = confidence
 
     return jsonify(response)
