@@ -10,7 +10,7 @@ const rules = [
   { category: 'Politics', words: ['government', 'election', 'minister', 'policy', 'parliament', 'vote', 'law'] }
 ];
 
-function escapeRegExp(value) {
+function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
@@ -21,7 +21,7 @@ function classifyText(text) {
   for (const rule of rules) {
     let score = 0;
     for (const word of rule.words) {
-      const wordPattern = new RegExp(`\\b${escapeRegExp(word)}\\b`, 'i');
+      const wordPattern = new RegExp(`\\b${escapeRegex(word)}\\b`, 'i');
       if (wordPattern.test(text)) {
         score += 1;
       }
