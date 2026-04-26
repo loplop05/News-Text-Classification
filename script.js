@@ -4,9 +4,9 @@ const clearBtn = document.getElementById('clearBtn');
 const statusText = document.getElementById('statusText');
 
 const rules = [
-  { category: 'Sports', words: ['match', 'team', 'goal', 'league', 'coach', 'player', 'tournament'] },
-  { category: 'Business', words: ['market', 'stock', 'economy', 'company', 'investment', 'profit', 'trade'] },
-  { category: 'Technology', words: ['software', 'technology', 'ai', 'device', 'internet', 'application', 'data'] },
+  { category: 'Sports', words: ['stadium', 'team', 'goal', 'league', 'coach', 'player', 'tournament'] },
+  { category: 'Business', words: ['market', 'stock', 'economy', 'revenue', 'investment', 'profit', 'trade'] },
+  { category: 'Technology', words: ['software', 'technology', 'ai', 'device', 'internet', 'application', 'algorithm'] },
   { category: 'Politics', words: ['government', 'election', 'minister', 'policy', 'parliament', 'vote', 'law'] }
 ];
 
