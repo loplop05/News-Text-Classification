@@ -21,3 +21,5 @@ Then open:
 - `http://127.0.0.1:5000`
 
 The **Classify** button sends the text to `/predict`, and the model result is displayed in the page.
+
+> Note: `python app.py` runs Flask's development server. For production, use a production WSGI server (for example, gunicorn or waitress).
