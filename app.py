@@ -144,7 +144,7 @@ def predict():
         classes = getattr(MODEL, "classes_", None)
 
     response = {"category": str(prediction)}
-    if probabilities is not None and classes is not None:
+    if probabilities is not None and classes is not None and len(probabilities) > 0:
         confidence = max(float(prob) for prob in probabilities)
         response["confidence"] = confidence
 
@@ -152,4 +152,4 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(host="127.0.0.1", port=5000, debug=False)

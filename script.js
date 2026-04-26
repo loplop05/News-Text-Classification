@@ -33,9 +33,9 @@ classifyBtn.addEventListener('click', async () => {
     const result = await classifyText(text);
     if (typeof result.confidence === 'number') {
       statusText.textContent = `Category: ${result.category} (confidence: ${(result.confidence * 100).toFixed(1)}%).`;
-      return;
+    } else {
+      statusText.textContent = `Category: ${result.category}.`;
     }
-    statusText.textContent = `Category: ${result.category}.`;
   } catch (error) {
     statusText.textContent = error.message || 'Unable to classify text.';
   }
