@@ -13,7 +13,7 @@ Place one of the following in the project root:
 
 ```bash
 pip install -r requirements.txt
-python /home/runner/work/News-Text-Classification/News-Text-Classification/app.py
+python app.py
 ```
 
 Then open:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
@@ -43,8 +44,6 @@ def normalize_arabic(text: str) -> str:
 
 
 def remove_noise(text: str) -> str:
-    import re
-
     text = re.sub(r"http\S+|www\.\S+", "", text)
     text = re.sub(r"[^\u0600-\u06FF\s]", " ", text)
     text = re.sub(r"\s+", " ", text).strip()
