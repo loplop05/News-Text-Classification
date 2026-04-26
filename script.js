@@ -3,39 +3,23 @@ const classifyBtn = document.getElementById('classifyBtn');
 const clearBtn = document.getElementById('clearBtn');
 const statusText = document.getElementById('statusText');
 
-const rules = [
-  { category: 'Sports', words: ['stadium', 'team', 'goal', 'league', 'coach', 'player', 'tournament'] },
-  { category: 'Business', words: ['market', 'stock', 'economy', 'revenue', 'investment', 'profit', 'trade'] },
-  { category: 'Technology', words: ['software', 'technology', 'ai', 'device', 'internet', 'application', 'algorithm'] },
-  { category: 'Politics', words: ['government', 'election', 'minister', 'policy', 'parliament', 'vote', 'law'] }
-];
+async function classifyText(text) {
+  const response = await fetch('/predict', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ text })
+  });
 
-function escapeRegex(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function classifyText(text) {
-  let bestCategory = 'General';
-  let bestScore = 0;
-
-  for (const rule of rules) {
-    let score = 0;
-    for (const word of rule.words) {
-      const wordPattern = new RegExp(`\\b${escapeRegex(word)}\\b`, 'i');
-      if (wordPattern.test(text)) {
-        score += 1;
-      }
-    }
-    if (score > bestScore) {
-      bestScore = score;
-      bestCategory = rule.category;
-    }
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Classification failed.');
   }
-
-  return { category: bestCategory, score: bestScore };
+  return data;
 }
 
-classifyBtn.addEventListener('click', () => {
+classifyBtn.addEventListener('click', async () => {
   const text = newsText.value.trim();
 
   if (!text) {
@@ -43,14 +27,18 @@ classifyBtn.addEventListener('click', () => {
     return;
   }
 
-  const result = classifyText(text);
+  statusText.textContent = 'Classifying...';
 
-  if (result.score === 0) {
-    statusText.textContent = 'Category: General (no clear keyword match).';
-    return;
+  try {
+    const result = await classifyText(text);
+    if (typeof result.confidence === 'number') {
+      statusText.textContent = `Category: ${result.category} (confidence: ${(result.confidence * 100).toFixed(1)}%).`;
+      return;
+    }
+    statusText.textContent = `Category: ${result.category}.`;
+  } catch (error) {
+    statusText.textContent = error.message || 'Unable to classify text.';
   }
-
-  statusText.textContent = `Category: ${result.category} (matched ${result.score} keyword${result.score > 1 ? 's' : ''}).`;
 });
 
 clearBtn.addEventListener('click', () => {
