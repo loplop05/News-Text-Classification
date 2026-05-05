@@ -11,7 +11,7 @@ This project classifies Arabic news articles into predefined categories using cl
 
 ## Dataset
 
-The notebook expects a CSV file named `arabic_news.csv` in the repository root with at least the following columns:
+The notebook expects a CSV file named `arabic_news.csv` in the repository root (the same directory as the notebooks) with at least the following columns:
 
 - `text` — the Arabic news article text
 - `label` — the category label
@@ -56,7 +56,7 @@ The notebook compares multiple traditional machine learning approaches:
 
 ## Outputs
 
-Running the notebook generates several artifacts in the repository root, including:
+Running the notebook generates the following artifacts in the repository root:
 
 - `confusion_matrix.png`
 - `eda_plots.png`
