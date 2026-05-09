@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic News Text Classification</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --text-color: #34495e;
+            --light-bg: #ecf0f1;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            margin: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Section Styling */
+        section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+        
+        .section-subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+        
+        /* Card Styling */
+        .custom-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: none;
+        }
+        
+        .custom-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        /* Model Cards */
+        .model-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .model-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .model-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .accuracy-badge {
+            background: linear-gradient(135deg, var(--success-color), #2ecc71);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+        
+        /* Results Gallery */
+        .results-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .result-image {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .result-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .result-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Demo Section */
+        .demo-section {
+            background: var(--light-bg);
+        }
+        
+        .demo-container {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .demo-input {
+            min-height: 150px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .demo-input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+        
+        .demo-button {
+            background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .demo-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .demo-button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        .result-label {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-confidence {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .results-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Spinner */
+        .spinner-border {
+            display: none;
+        }
+        
+        .loading .spinner-border {
+            display: inline-block;
+        }
+        
+        /* Alert Styling */
+        .alert-custom {
+            border-radius: 10px;
+            border: none;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-newspaper"></i> Arabic News Classifier
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#models">Models</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#results">Results</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#demo">Demo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/loplop05/News-Text-Classification" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-content text-center">
+            <h1 class="hero-title">Arabic News Text Classification</h1>
+            <p class="hero-subtitle">
+                Advanced Machine Learning System for Automatic Categorization of Arabic News Articles
+            </p>
+            <div class="mt-4">
+                <span class="hero-badge"><i class="fas fa-language"></i> Natural Language Processing</span>
+                <span class="hero-badge"><i class="fas fa-brain"></i> Machine Learning</span>
+                <span class="hero-badge"><i class="fas fa-chart-line"></i> Multi-Class Classification</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Project Overview</h2>
+                <p class="section-subtitle">Understanding the Problem & Solution</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="custom-card text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3 class="card-title">The Problem</h3>
+                        <p>Manual classification of thousands of Arabic news articles is time-consuming and inconsistent. News organizations need automated systems to categorize content efficiently and accurately.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="custom-card text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3 class="card-title">The Solution</h3>
+                        <p>An intelligent machine learning system that automatically classifies Arabic news articles into three categories: Sports (رياضة), Politics (سياسة), and Economy (اقتصاد) with high accuracy.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="custom-card text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3 class="card-title">The Impact</h3>
+                        <p>Enables real-time content categorization, improves user experience through better content organization, and reduces manual labor costs by up to 95%.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="custom-card">
+                        <h3 class="card-title"><i class="fas fa-info-circle"></i> Project Details</h3>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Dataset:</strong> Arabic news articles with labeled categories
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Categories:</strong> 3 classes (Sports, Politics, Economy)
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Preprocessing:</strong> Arabic-specific text normalization and cleaning
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Feature Extraction:</strong> Bag of Words (CountVectorizer) and TF-IDF
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Approach:</strong> Comparative analysis of classical ML algorithms
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Models Section -->
+    <section id="models">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Machine Learning Models</h2>
+                <p class="section-subtitle">Comparative Analysis of Classification Algorithms</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="model-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4 class="model-name">
+                                    <i class="fas fa-chart-bar text-primary me-2"></i>
+                                    Logistic Regression
+                                </h4>
+                                <p class="mb-0">Linear model for binary and multiclass classification. Fast training and interpretable results. Excellent baseline for text classification tasks.</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <span class="accuracy-badge">High Accuracy</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="model-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4 class="model-name">
+                                    <i class="fas fa-vector-square text-primary me-2"></i>
+                                    Linear SVM (LinearSVC)
+                                </h4>
+                                <p class="mb-0">Support Vector Machine optimized for linear classification. Effective in high-dimensional spaces and robust to overfitting in text data.</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <span class="accuracy-badge">High Accuracy</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="model-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4 class="model-name">
+                                    <i class="fas fa-calculator text-primary me-2"></i>
+                                    Multinomial Naive Bayes
+                                </h4>
+                                <p class="mb-0">Probabilistic classifier based on Bayes' theorem. Particularly suited for text classification with discrete features like word counts.</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <span class="accuracy-badge">Good Performance</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="model-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4 class="model-name">
+                                    <i class="fas fa-tree text-primary me-2"></i>
+                                    Random Forest
+                                </h4>
+                                <p class="mb-0">Ensemble learning method using multiple decision trees. Reduces overfitting and captures complex patterns in the data.</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <span class="accuracy-badge">Robust Results</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Results & Visualizations</h2>
+                <p class="section-subtitle">Performance Metrics and Analysis</p>
+            </div>
+            
+            <div class="results-gallery">
+                <div class="result-image" data-bs-toggle="modal" data-bs-target="#imageModal1">
+                    <img src="model_comparison.png" alt="Model Comparison">
+                    <div class="p-3 bg-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Model Comparison</h5>
+                        <small class="text-muted">Performance across all models</small>
+                    </div>
+                </div>
+                
+                <div class="result-image" data-bs-toggle="modal" data-bs-target="#imageModal2">
+                    <img src="confusion_matrix.png" alt="Confusion Matrix">
+                    <div class="p-3 bg-white">
+                        <h5 class="mb-0"><i class="fas fa-table me-2"></i>Confusion Matrix</h5>
+                        <small class="text-muted">Classification accuracy breakdown</small>
+                    </div>
+                </div>
+                
+                <div class="result-image" data-bs-toggle="modal" data-bs-target="#imageModal3">
+                    <img src="eda_plots.png" alt="EDA Plots">
+                    <div class="p-3 bg-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>EDA Analysis</h5>
+                        <small class="text-muted">Data distribution and insights</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="demo-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Live Demo</h2>
+                <p class="section-subtitle">Try the Classifier with Your Own Text</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="demo-container">
+                        <div class="alert alert-info alert-custom mb-4">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Note:</strong> This is a simulated demo. Enter Arabic news text below and click "Classify" to see how the model categorizes it. For the full implementation, please check the <a href="https://github.com/loplop05/News-Text-Classification" target="_blank">GitHub repository</a>.
+                        </div>
+                        
+                        <form id="demoForm">
+                            <div class="mb-4">
+                                <label for="newsText" class="form-label fw-bold">
+                                    <i class="fas fa-edit me-2"></i>Enter Arabic News Text
+                                </label>
+                                <textarea 
+                                    class="form-control demo-input" 
+                                    id="newsText" 
+                                    placeholder="أدخل نص الأخبار العربية هنا... مثل: فاز الفريق المحلي بالمباراة النهائية"
+                                    required
+                                    dir="rtl"
+                                ></textarea>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button type="submit" class="demo-button" id="classifyBtn">
+                                    <span class="btn-text">
+                                        <i class="fas fa-magic me-2"></i>Classify Text
+                                    </span>
+                                    <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div id="resultBox" class="result-box">
+                            <div class="text-center">
+                                <i class="fas fa-check-circle fa-3x mb-3"></i>
+                                <h4 class="result-label">Category: <span id="predictedLabel"></span></h4>
+                                <p class="result-confidence">Confidence: <span id="confidence"></span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5 class="mb-3"><i class="fas fa-flask me-2"></i>Sample Texts to Try:</h5>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary text-end" onclick="setSample('فاز المنتخب الوطني بكأس العالم بعد مباراة مثيرة استمرت 90 دقيقة')" dir="rtl">
+                                    فاز المنتخب الوطني بكأس العالم... (Sports)
+                                </button>
+                                <button class="btn btn-outline-primary text-end" onclick="setSample('أعلن الرئيس عن قرارات جديدة في الاجتماع الحكومي اليوم')" dir="rtl">
+                                    أعلن الرئيس عن قرارات جديدة... (Politics)
+                                </button>
+                                <button class="btn btn-outline-primary text-end" onclick="setSample('ارتفعت أسعار النفط في الأسواق العالمية بنسبة 5 بالمئة')" dir="rtl">
+                                    ارتفعت أسعار النفط... (Economy)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <h4 class="mb-3">Arabic News Text Classification</h4>
+                    <p>An open-source machine learning project for automatic categorization of Arabic news articles</p>
+                </div>
+            </div>
+            
+            <div class="social-links mb-4">
+                <a href="https://github.com/loplop05/News-Text-Classification" target="_blank" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="#" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="#" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+            
+            <hr style="border-color: rgba(255,255,255,0.1);">
+            
+            <div class="mt-3">
+                <p class="mb-0">&copy; 2026 Arabic News Classifier. Built with <i class="fas fa-heart text-danger"></i> using Machine Learning</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Image Modals -->
+    <div class="modal fade" id="imageModal1" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Model Comparison</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="model_comparison.png" class="img-fluid" alt="Model Comparison">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="imageModal2" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confusion Matrix</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="confusion_matrix.png" class="img-fluid" alt="Confusion Matrix">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="imageModal3" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">EDA Analysis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="eda_plots.png" class="img-fluid" alt="EDA Plots">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sample text setter
+        function setSample(text) {
+            document.getElementById('newsText').value = text;
+            document.getElementById('newsText').focus();
+        }
+        
+        // Demo Form Handler
+        document.getElementById('demoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const text = document.getElementById('newsText').value.trim();
+            const btn = document.getElementById('classifyBtn');
+            const resultBox = document.getElementById('resultBox');
+            
+            if (!text) {
+                alert('Please enter some text to classify!');
+                return;
+            }
+            
+            // Show loading state
+            btn.disabled = true;
+            btn.classList.add('loading');
+            resultBox.style.display = 'none';
+            
+            // Simulate API call with setTimeout
+            setTimeout(() => {
+                // Simple keyword-based classification for demo
+                let category = '';
+                let confidence = '';
+                
+                // Sports keywords
+                const sportsKeywords = ['فاز', 'مباراة', 'كأس', 'هدف', 'لاعب', 'منتخب', 'فريق', 'بطولة', 'رياضة'];
+                // Politics keywords
+                const politicsKeywords = ['رئيس', 'حكومة', 'وزير', 'قرار', 'اجتماع', 'سياسة', 'برلمان', 'انتخابات'];
+                // Economy keywords
+                const economyKeywords = ['اقتصاد', 'أسعار', 'نفط', 'بورصة', 'دولار', 'سوق', 'تجارة', 'استثمار'];
+                
+                const sportsCount = sportsKeywords.filter(word => text.includes(word)).length;
+                const politicsCount = politicsKeywords.filter(word => text.includes(word)).length;
+                const economyCount = economyKeywords.filter(word => text.includes(word)).length;
+                
+                const max = Math.max(sportsCount, politicsCount, economyCount);
+                
+                if (max === 0) {
+                    category = 'غير محدد (Unknown)';
+                    confidence = '50%';
+                } else if (sportsCount === max) {
+                    category = 'رياضة (Sports)';
+                    confidence = Math.min(85 + sportsCount * 3, 98) + '%';
+                } else if (politicsCount === max) {
+                    category = 'سياسة (Politics)';
+                    confidence = Math.min(85 + politicsCount * 3, 98) + '%';
+                } else {
+                    category = 'اقتصاد (Economy)';
+                    confidence = Math.min(85 + economyCount * 3, 98) + '%';
+                }
+                
+                // Display result
+                document.getElementById('predictedLabel').textContent = category;
+                document.getElementById('confidence').textContent = confidence;
+                resultBox.style.display = 'block';
+                
+                // Reset button
+                btn.disabled = false;
+                btn.classList.remove('loading');
+                
+                // Scroll to result
+                resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 1500);
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Add scroll animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.custom-card, .model-card, .result-image').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
