@@ -5,7 +5,6 @@ import pyarabic.araby as araby
 
 app = Flask(__name__)
 
-# Load the trained model pipeline
 try:
     with open('model.pkl', 'rb') as f:
         model = pickle.load(f)
@@ -50,10 +49,8 @@ def predict():
     text = data['text']
     processed_text = preprocess_arabic(text)
     
-    # Predict using the pipeline
     prediction = model.predict([processed_text])[0]
     
-    # Map English labels to Arabic if needed (optional, but good for UI)
     label_map = {
         'رياضة': 'رياضة (Sports)',
         'سياسة': 'سياسة (Politics)',

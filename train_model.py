@@ -30,10 +30,8 @@ def preprocess_arabic(text):
 # Load data
 df = pd.read_csv('arabic_news.csv', encoding='utf-8-sig')
 
-# Preprocess
 df['clean_text'] = df['text'].apply(preprocess_arabic)
 
-# Create Pipeline
 pipeline = Pipeline([
     ('tfidf', TfidfVectorizer(ngram_range=(1, 2))),
     ('clf', LogisticRegression())
