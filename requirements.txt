@@ -5,3 +5,4 @@ seaborn
 pyarabic
 nltk
 scikit-learn
+flask

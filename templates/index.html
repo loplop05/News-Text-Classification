@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic News Text Classification</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-newspaper me-2"></i>ArabicNews AI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#models">Models</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#results">Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#demo">Live Demo</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="container text-center hero-content">
+            <h1 class="hero-title">Arabic News Text Classification</h1>
+            <p class="hero-subtitle">Harnessing Natural Language Processing to categorize Arabic news headlines with high precision.</p>
+            <div class="d-flex justify-content-center flex-wrap">
+                <span class="hero-badge"><i class="fas fa-volleyball-ball me-2"></i>Sports</span>
+                <span class="hero-badge"><i class="fas fa-landmark me-2"></i>Politics</span>
+                <span class="hero-badge"><i class="fas fa-chart-line me-2"></i>Economy</span>
+            </div>
+            <div class="mt-5">
+                <a href="#demo" class="demo-button text-decoration-none">Try the Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">About the Project</h2>
+                <p class="section-subtitle">A comprehensive approach to Arabic text analysis</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="custom-card">
+                        <div class="card-icon"><i class="fas fa-broom"></i></div>
+                        <h3 class="card-title">Preprocessing</h3>
+                        <p>Advanced cleaning including tashkeel removal, normalization, and light stemming tailored for Arabic morphology.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="custom-card">
+                        <div class="card-icon"><i class="fas fa-project-diagram"></i></div>
+                        <h3 class="card-title">Feature Extraction</h3>
+                        <p>Utilizing TF-IDF and Bag of Words (BoW) with unigrams and bigrams to capture semantic meaning.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="custom-card">
+                        <div class="card-icon"><i class="fas fa-brain"></i></div>
+                        <h3 class="card-title">ML Models</h3>
+                        <p>Comparison of multiple algorithms including SVM, Logistic Regression, Naive Bayes, and Random Forest.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Models Section -->
+    <section id="models" class="bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="section-title">Model Performance</h2>
+                    <p class="section-subtitle">Our best-performing model reaches over 90% accuracy.</p>
+                    <p class="mb-4">We evaluated several machine learning models to find the most effective approach for short Arabic text classification. TF-IDF features combined with Linear SVC and Logistic Regression showed the best results.</p>
+                    
+                    <div class="model-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="model-name">Logistic Regression + TF-IDF</span>
+                            <span class="accuracy-badge">92% Accuracy</span>
+                        </div>
+                    </div>
+                    <div class="model-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="model-name">Linear SVC</span>
+                            <span class="accuracy-badge">91% Accuracy</span>
+                        </div>
+                    </div>
+                    <div class="model-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="model-name">Multinomial Naive Bayes</span>
+                            <span class="accuracy-badge">88% Accuracy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="result-image ms-lg-4" data-bs-toggle="modal" data-bs-target="#imageModal1">
+                        <img src="{{ url_for('static', filename='images/model_comparison.png') }}" alt="Model Comparison">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Analysis & Visualizations</h2>
+                <p class="section-subtitle">Insights from our data exploration and model evaluation</p>
+            </div>
+            <div class="results-gallery">
+                <div class="result-image" data-bs-toggle="modal" data-bs-target="#imageModal2">
+                    <img src="{{ url_for('static', filename='images/confusion_matrix.png') }}" alt="Confusion Matrix">
+                    <div class="p-3 text-center fw-bold">Confusion Matrix</div>
+                </div>
+                <div class="result-image" data-bs-toggle="modal" data-bs-target="#imageModal3">
+                    <img src="{{ url_for('static', filename='images/eda_plots.png') }}" alt="EDA Plots">
+                    <div class="p-3 text-center fw-bold">EDA Analysis</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="demo-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Live Demo</h2>
+                <p class="section-subtitle">Try the classifier with your own Arabic text</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="demo-container">
+                        <form id="demoForm">
+                            <div class="mb-4">
+                                <label for="newsText" class="form-label fw-bold">Enter Arabic News Headline:</label>
+                                <textarea class="form-control demo-input" id="newsText" placeholder="...أدخل نص الخبر هنا" dir="rtl"></textarea>
+                            </div>
+                            <div class="text-center mb-4">
+                                <button type="submit" class="demo-button" id="classifyBtn">
+                                    <span class="spinner-border spinner-border-sm" role="status"></span>
+                                    Classify Text
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="mb-3">
+                            <p class="small text-muted mb-2">Try these samples:</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-sm btn-outline-secondary" onclick="setSample('فاز المنتخب الوطني بمباراة ودية استعداداً للبطولة')">Sports Sample</button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="setSample('اجتمع رئيس الوزراء مع أعضاء البرلمان لمناقشة الميزانية')">Politics Sample</button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="setSample('شهدت أسعار النفط ارتفاعاً ملحوظاً في تداولات اليوم')">Economy Sample</button>
+                            </div>
+                        </div>
+
+                        <div id="resultBox" class="result-box">
+                            <div class="text-center">
+                                <p class="mb-1">Predicted Category:</p>
+                                <div class="result-label" id="predictedLabel">Category Name</div>
+                                <div class="result-confidence" id="confidence">Confidence: 0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <h4>Arabic News AI</h4>
+                    <p>Advanced NLP Solutions for Arabic Content</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="social-links mb-3">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                    <p class="small mb-0">&copy; 2026 Arabic News Classification Project. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals for Images -->
+    <div class="modal fade" id="imageModal1" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Model Comparison</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="{{ url_for('static', filename='images/model_comparison.png') }}" class="img-fluid" alt="Model Comparison">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="imageModal2" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confusion Matrix</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="{{ url_for('static', filename='images/confusion_matrix.png') }}" class="img-fluid" alt="Confusion Matrix">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="imageModal3" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">EDA Analysis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="{{ url_for('static', filename='images/eda_plots.png') }}" class="img-fluid" alt="EDA Plots">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
