@@ -6,7 +6,7 @@ import pyarabic.araby as araby
 app = Flask(__name__)
 
 try:
-    with open('model.pkl', 'rb') as f:
+    with open('NewsClassifierModel.pkl', 'rb') as f:
         model = pickle.load(f)
 except FileNotFoundError:
     model = None

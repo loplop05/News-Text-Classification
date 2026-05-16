@@ -41,7 +41,7 @@ pipeline = Pipeline([
 pipeline.fit(df['clean_text'], df['label'])
 
 
-with open('model.pkl', 'wb') as f:
+with open('NewsClassifierModel.pkl', 'wb') as f:
     pickle.dump(pipeline, f)
 
 
