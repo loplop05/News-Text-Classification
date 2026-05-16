@@ -22,28 +22,6 @@ The notebook describes three target categories:
 - سياسة (Politics)
 - اقتصاد (Economy)
 
-The dataset file is not included in this repository. Provide your own dataset in the required format before running the notebook.
-
-## Requirements
-
-- Python 3.9+ (recommended)
-- Jupyter Notebook or JupyterLab
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-## How to Run
-
-1. (Recommended) Create and activate a virtual environment.
-2. Install dependencies from `requirements.txt`.
-3. Start Jupyter:
-
-```bash
-jupyter lab
-```
 
 4. Open `arabic_news_classification.ipynb` and run the cells in order.
 
