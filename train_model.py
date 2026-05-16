@@ -27,7 +27,7 @@ def preprocess_arabic(text):
     text = remove_noise(text)
     return text
 
-# Load data
+
 df = pd.read_csv('arabic_news.csv', encoding='utf-8-sig')
 
 df['clean_text'] = df['text'].apply(preprocess_arabic)
@@ -37,10 +37,10 @@ pipeline = Pipeline([
     ('clf', LogisticRegression())
 ])
 
-# Train
+
 pipeline.fit(df['clean_text'], df['label'])
 
-# Save model
+
 with open('model.pkl', 'wb') as f:
     pickle.dump(pipeline, f)
 
